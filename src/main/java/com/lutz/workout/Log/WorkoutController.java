@@ -1,5 +1,6 @@
 package com.lutz.workout.Log;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,4 +30,9 @@ public class WorkoutController {
                 .orElseThrow(() -> new WorkoutLogNotFoundException());
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("")
+    public void addWorkoutLog(@Valid @RequestBody WorkoutLog workoutLog) {
+        workoutLogRepository.addWorkoutLog(workoutLog);
+    }
 }

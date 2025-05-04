@@ -11,10 +11,8 @@ public record WorkoutLog(
         Integer id,
         @NotEmpty
         String username,
-        @NotEmpty
         LocalDate week_start,
         DayOfWeek day_of_week,
-        @NotEmpty
         Split split_name,
         @NotEmpty
         String exercise_name,
