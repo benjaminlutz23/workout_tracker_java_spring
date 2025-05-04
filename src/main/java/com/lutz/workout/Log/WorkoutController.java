@@ -35,4 +35,16 @@ public class WorkoutController {
     public void addWorkoutLog(@Valid @RequestBody WorkoutLog workoutLog) {
         workoutLogRepository.addWorkoutLog(workoutLog);
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/{workoutLogId}")
+    public void updateWorkoutLog(@Valid @RequestBody WorkoutLog workoutLog, @PathVariable Integer workoutLogId) {
+        workoutLogRepository.updateWorkoutLog(workoutLog, workoutLogId);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{workoutLogId}")
+    public void deleteWorkoutLog(@PathVariable Integer workoutLogId) {
+        workoutLogRepository.deleteWorkoutLog(workoutLogId);
+    }
 }
