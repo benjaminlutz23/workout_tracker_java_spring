@@ -24,9 +24,9 @@ public class WorkoutApplication {
     @Bean
     CommandLineRunner runner(WorkoutLogRepository workoutLogRepository) {
         return args -> {
-            WorkoutLog workoutLog1 = new WorkoutLog("JohnDoe", LocalDate.now(), DayOfWeek.FRIDAY, Split.PUSH, "Bench Press", 3, 10, 80);
+            WorkoutLog workoutLog1 = new WorkoutLog(1, "JohnDoe", LocalDate.now(), DayOfWeek.FRIDAY, Split.PUSH, "Bench Press", 3, 10, 80);
             workoutLogRepository.addWorkoutLog(workoutLog1);
-            logger.info("Workout log added: {}", workoutLog1);
+            logger.info("Workout log added: {}", workoutLogRepository.getWorkoutLogs());
         };
     }
 
