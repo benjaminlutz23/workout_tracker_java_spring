@@ -1,0 +1,59 @@
+{
+  "workoutLogs": [
+    {
+      "id": 11,
+      "username": "benny",
+      "week_start": "2024-04-22",
+      "day_of_week": "MONDAY",
+      "split_name": "PUSH",
+      "exercise_name": "Bench Press",
+      "sets": 4,
+      "reps": 8,
+      "weight": 185
+    },
+    {
+      "id": 2,
+      "username": "benny",
+      "week_start": "2024-04-22",
+      "day_of_week": "WEDNESDAY",
+      "split_name": "PULL",
+      "exercise_name": "Deadlift",
+      "sets": 3,
+      "reps": 5,
+      "weight": 275
+    },
+    {
+      "id": 3,
+      "username": "benny",
+      "week_start": "2024-04-22",
+      "day_of_week": "FRIDAY",
+      "split_name": "LEGS",
+      "exercise_name": "Squat",
+      "sets": 5,
+      "reps": 5,
+      "weight": 225
+    },
+    {
+      "id": 4,
+      "username": "benny",
+      "week_start": "2024-04-29",
+      "day_of_week": "MONDAY",
+      "split_name": "PUSH",
+      "exercise_name": "Overhead Press",
+      "sets": 4,
+      "reps": 6,
+      "weight": 115
+    },
+    {
+      "id": 5,
+      "username": "benny",
+      "week_start": "2024-04-29",
+      "day_of_week": "WEDNESDAY",
+      "split_name": "PULL",
+      "exercise_name": "Barbell Row",
+      "sets": 4,
+      "reps": 10,
+      "weight": 145
+    }
+  ]
+}

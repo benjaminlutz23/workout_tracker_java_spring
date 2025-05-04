@@ -8,7 +8,11 @@ import java.util.List;
 @Repository
 public class WorkoutLogRepository {
 
-    public List<WorkoutLog> workoutLogs = new ArrayList<>();
+    public List<WorkoutLog> workoutLogs;
+
+    public WorkoutLogRepository() {
+       workoutLogs = new ArrayList<>();
+    }
 
     public List<WorkoutLog> getWorkoutLogs() {
         return workoutLogs;
@@ -30,5 +34,12 @@ public class WorkoutLogRepository {
 
     public void deleteWorkoutLog(Integer workoutLogId) {
         workoutLogs.removeIf(workoutLog -> workoutLog.id().equals(workoutLogId));
+    }
+
+    public int countWorkoutLogs() {
+        if (workoutLogs.isEmpty()) {
+            return 0;
+        }
+        return workoutLogs.size();
     }
 }
