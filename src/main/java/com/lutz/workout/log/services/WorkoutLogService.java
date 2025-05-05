@@ -19,16 +19,17 @@ public class WorkoutLogService {
     }
 
     public Integer countWorkoutLogs() {
-        return workoutLogRepository.countWorkoutLogs();
+        return workoutLogRepository.count();
     }
 
     @Transactional
     public void createWorkoutLog(WorkoutLog workoutLog) {
         Integer userId = workoutLogRepository.insertUserIntoUserTable(workoutLog.username());
         Integer exerciseId = workoutLogRepository.insertExerciseIntoExerciseTable(workoutLog.exercise_name());
-        Integer splitId = workoutLogRepository.insertSplitIntoSplitTable(userId, workoutLog.week_start(), workoutLog.day_of_week().toString(), workoutLog.split_name().toString());
-        Integer workoutLogId = workoutLogRepository.insertWorkoutLogIntoWorkoutLogTable(userId, workoutLog.week_start(), workoutLog.day_of_week().toString(), exerciseId, workoutLog.sets(), workoutLog.reps(), workoutLog.weight());
-        logger.info("User ID: {}, Exercise ID: {}", userId, exerciseId);
+        Integer splitId = workoutLogRepository.insertSplitIntoSplitTable(workoutLog.split_name().toString());
+        Integer workoutId = workoutLogRepository.insertWorkoutIntoWorkoutTable(userId, splitId, workoutLog.week_start(), workoutLog.day_of_week().toString());
+        Integer exerciseDetailsId = workoutLogRepository.insertExerciseDetailsIntoExerciseDetailsTable(workoutId, exerciseId, workoutLog.sets(), workoutLog.reps(), workoutLog.weight());
+        logger.info("\nUser ID: {} \n Exercise ID: {} \n Split ID: {} \n Workout ID: {} \n Exercise Details ID: {}", userId, exerciseId, splitId, workoutId, exerciseDetailsId);
     }
 
 }

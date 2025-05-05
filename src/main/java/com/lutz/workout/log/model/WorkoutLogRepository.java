@@ -1,15 +1,12 @@
 package com.lutz.workout.log.model;
 
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.jdbc.core.simple.JdbcClient;
-import org.springframework.jdbc.core.simple.JdbcClient.StatementSpec;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -41,8 +38,8 @@ public class WorkoutLogRepository {
         return Objects.requireNonNull(keyHolder.getKey()).intValue();
     }
 
-    public Integer countWorkoutLogs() {
-        return jdbcClient.sql("SELECT COUNT(*) FROM WorkoutLogs")
+    public Integer count() {
+        return jdbcClient.sql("SELECT COUNT(*) FROM ExerciseDetails")
                 .query()
                 .listOfRows()
                 .size();
@@ -67,11 +64,8 @@ public class WorkoutLogRepository {
         return Objects.requireNonNull(keyHolder.getKey()).intValue();
     }
 
-    public Integer insertSplitIntoSplitTable(Integer user_id, LocalDate week_start, String day_of_week, String split_name) {
-        Optional<Integer> existingSplitId = jdbcClient.sql("SELECT split_id FROM WeeklySplit WHERE user_id = :user_id AND week_start = :week_start AND day_name = :day_of_week AND split_name = :split_name")
-                .param("user_id", user_id)
-                .param("week_start", week_start)
-                .param("day_of_week", day_of_week)
+    public Integer insertSplitIntoSplitTable(String split_name) {
+        Optional<Integer> existingSplitId = jdbcClient.sql("SELECT split_id FROM Split WHERE split_name = :split_name")
                 .param("split_name", split_name)
                 .query(Integer.class)
                 .optional();
@@ -82,22 +76,19 @@ public class WorkoutLogRepository {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcClient.sql("INSERT INTO WeeklySplit (user_id, week_start, day_name, split_name) VALUES (:user_id, :week_start, :day_of_week, :split_name)")
-                .param("user_id", user_id)
-                .param("week_start", week_start)
-                .param("day_of_week", day_of_week)
+        jdbcClient.sql("INSERT INTO Split (split_name) VALUES (:split_name)")
                 .param("split_name", split_name)
                 .update(keyHolder);
 
         return Objects.requireNonNull(keyHolder.getKey()).intValue();
     }
 
-    public Integer insertWorkoutLogIntoWorkoutLogTable(Integer user_id, LocalDate week_start, String day_name, Integer exercise_id, Integer sets, Integer reps, Integer weight) {
-        Optional<Integer> existingWorkoutLogId = jdbcClient.sql("SELECT workout_id FROM WorkoutLogs WHERE user_id = :user_id AND week_start = :week_start AND day_name = :day_name AND exercise_id = :exercise_id")
+    public Integer insertWorkoutIntoWorkoutTable(Integer user_id, Integer split_id, LocalDate week_start, String day_name) {
+        Optional<Integer> existingWorkoutLogId = jdbcClient.sql("SELECT workout_id FROM Workout WHERE user_id = :user_id AND split_id = :split_id AND week_start = :week_start AND day_name = :day_name")
                 .param("user_id", user_id)
+                .param("split_id", split_id)
                 .param("week_start", week_start)
                 .param("day_name", day_name)
-                .param("exercise_id", exercise_id)
                 .query(Integer.class)
                 .optional();
 
@@ -107,10 +98,34 @@ public class WorkoutLogRepository {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcClient.sql("INSERT INTO WorkoutLogs (user_id, week_start, day_name, exercise_id, sets, reps, weight) VALUES (:user_id, :week_start, :day_name, :exercise_id, :sets, :reps, :weight)")
+        jdbcClient.sql("INSERT INTO Workout (user_id, split_id, week_start, day_name) VALUES (:user_id, :split_id, :week_start, :day_name)")
                 .param("user_id", user_id)
+                .param("split_id", split_id)
                 .param("week_start", week_start)
                 .param("day_name", day_name)
+                .update(keyHolder);
+
+        return Objects.requireNonNull(keyHolder.getKey()).intValue();
+    }
+
+    public Integer insertExerciseDetailsIntoExerciseDetailsTable(Integer workout_id, Integer exercise_id, Integer sets, Integer reps, Integer weight) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        Optional<Integer> existingExerciseDetailsId = jdbcClient.sql("SELECT exercise_detail_id FROM ExerciseDetails WHERE workout_id = :workout_id AND exercise_id = :exercise_id AND sets = :sets AND reps = :reps AND weight = :weight")
+                .param("workout_id", workout_id)
+                .param("exercise_id", exercise_id)
+                .param("sets", sets)
+                .param("reps", reps)
+                .param("weight", weight)
+                .query(Integer.class)
+                .optional();
+
+        if (existingExerciseDetailsId.isPresent()) {
+            return existingExerciseDetailsId.get();
+        }
+
+        jdbcClient.sql("INSERT INTO ExerciseDetails (workout_id, exercise_id, sets, reps, weight) VALUES (:workout_id, :exercise_id, :sets, :reps, :weight)")
+                .param("workout_id", workout_id)
                 .param("exercise_id", exercise_id)
                 .param("sets", sets)
                 .param("reps", reps)
