@@ -1,4 +1,4 @@
-package com.lutz.workout.log.model;
+package com.lutz.workout.log.domain;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;

@@ -1,12 +1,11 @@
-package com.lutz.workout.log.model;
+package com.lutz.workout.log.services;
 
-import com.lutz.workout.log.services.LoadWorkoutsFromJson;
+import com.lutz.workout.log.domain.WorkoutLog;
+import com.lutz.workout.log.model.WorkoutLogRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.beans.Transient;
 
 
 @Service

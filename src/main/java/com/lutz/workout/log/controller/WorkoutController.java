@@ -1,13 +1,10 @@
 package com.lutz.workout.log.controller;
 
-import com.lutz.workout.log.model.WorkoutLog;
-import com.lutz.workout.log.exception.WorkoutLogNotFoundException;
-import com.lutz.workout.log.model.WorkoutLogService;
+import com.lutz.workout.log.domain.WorkoutLog;
+import com.lutz.workout.log.services.WorkoutLogService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/workout-logs")
