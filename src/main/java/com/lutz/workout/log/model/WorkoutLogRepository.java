@@ -1,46 +1,48 @@
 package com.lutz.workout.log.model;
 
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.jdbc.core.simple.JdbcClient.StatementSpec;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Repository
 public class WorkoutLogRepository {
 
-    public List<WorkoutLog> workoutLogs;
     public final JdbcClient jdbcClient;
 
-    public WorkoutLogRepository(JdbcClient jdbcClient) {
-       workoutLogs = new ArrayList<>();
-       this.jdbcClient = jdbcClient;
+    WorkoutLogRepository(JdbcClient jdbcClient) {
+        this.jdbcClient = jdbcClient;
     }
 
-    public List<WorkoutLog> getWorkoutLogs() {
-        return workoutLogs;
-    }
+    public Integer insertUserIntoUserTable(String username) {
+        Optional<Integer> existingUserId = jdbcClient.sql("SELECT user_id FROM Users WHERE username = :username")
+                .param("username", username)
+                .query(Integer.class)
+                .optional();
 
-    public void addWorkoutLog(WorkoutLog workoutLog) {
-        this.workoutLogs.add(workoutLog);
-    }
-
-    public void updateWorkoutLog(WorkoutLog workoutLog, Integer workoutLogId) {
-        for (int i = 0; i < workoutLogs.size(); i++) {
-            if (workoutLogs.get(i).id().equals(workoutLogId)) {
-                workoutLogs.set(i, workoutLog);
-            }
+        if (existingUserId.isPresent()) {
+            return existingUserId.get();
         }
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcClient.sql("INSERT INTO Users (username) VALUES (:username)")
+                .param("username", username)
+                .update(keyHolder);
+
+        return Objects.requireNonNull(keyHolder.getKey()).intValue();
     }
 
-    public void deleteWorkoutLog(Integer workoutLogId) {
-        workoutLogs.removeIf(workoutLog -> workoutLog.id().equals(workoutLogId));
-    }
-
-    public int countWorkoutLogs() {
-        if (workoutLogs.isEmpty()) {
-            return 0;
-        }
-        return workoutLogs.size();
+    public Integer countWorkoutLogs() {
+        return jdbcClient.sql("SELECT COUNT(*) FROM Users")
+                .query()
+                .listOfRows()
+                .size();
     }
 }

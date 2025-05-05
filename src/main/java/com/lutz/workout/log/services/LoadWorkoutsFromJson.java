@@ -3,7 +3,7 @@ package com.lutz.workout.log.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lutz.workout.WorkoutApplication;
 import com.lutz.workout.log.model.WorkoutLog;
-import com.lutz.workout.log.model.WorkoutLogRepository;
+import com.lutz.workout.log.model.WorkoutLogService;
 import com.lutz.workout.log.model.WorkoutLogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,17 +17,17 @@ public class LoadWorkoutsFromJson implements CommandLineRunner {
     public static final Logger logger = LoggerFactory.getLogger(LoadWorkoutsFromJson.class);
 
     private final ObjectMapper objectMapper;
-    private final WorkoutLogRepository workoutLogRepository;
+    private final WorkoutLogService workoutLogService;
 
-    LoadWorkoutsFromJson(WorkoutLogRepository workoutLogRepository, ObjectMapper objectMapper) {
-        this.workoutLogRepository = workoutLogRepository;
+    LoadWorkoutsFromJson(WorkoutLogService workoutLogService, ObjectMapper objectMapper) {
+        this.workoutLogService = workoutLogService;
         this.objectMapper = objectMapper;
     }
 
     @Override
     public void run(String... args) throws Exception {
 
-        if (workoutLogRepository.countWorkoutLogs() == 0) {
+        if (workoutLogService.countWorkoutLogs() == 0) {
             try (InputStream inputStream = WorkoutApplication.class.getResourceAsStream("/data/workouts.json")) {
 
                 if (inputStream == null) {
@@ -37,7 +37,7 @@ public class LoadWorkoutsFromJson implements CommandLineRunner {
                 logger.info("Loading workoutLogs from json file: ", allWorkouts.workoutLogs().size());
 
                 for (WorkoutLog workoutLog : allWorkouts.workoutLogs()) {
-                    workoutLogRepository.addWorkoutLog(workoutLog);
+                    workoutLogService.createWorkoutLog(workoutLog);
                 }
             }
             catch (Exception e) {
