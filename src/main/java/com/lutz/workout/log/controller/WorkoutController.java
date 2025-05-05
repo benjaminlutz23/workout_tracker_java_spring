@@ -43,10 +43,16 @@ public class WorkoutController {
 //    public void updateWorkoutLog(@Valid @RequestBody WorkoutLog workoutLog, @PathVariable Integer workoutLogId) {
 //        workoutLogService.updateWorkoutLog(workoutLog, workoutLogId);
 //    }
-//
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    @DeleteMapping("/{workoutLogId}")
-//    public void deleteWorkoutLog(@PathVariable Integer workoutLogId) {
-//        workoutLogService.deleteWorkoutLog(workoutLogId);
-//    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{username}")
+    public void deleteWorkoutLog(@PathVariable String username) {
+        workoutLogService.deleteUser(username);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{date}/{dayOfWeek}")
+    public void delateWorkoutLogByDate(@PathVariable String date, @PathVariable String dayOfWeek) {
+        workoutLogService.deleteWorkoutLogByDate(date, dayOfWeek);
+    }
 }

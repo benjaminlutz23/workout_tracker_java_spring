@@ -7,6 +7,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -154,5 +155,25 @@ public class WorkoutLogRepository {
                         "JOIN Exercise e ON e.exercise_id = ed.exercise_id")
                 .query(WorkoutLog.class)
                 .list();
+    }
+
+    public void deleteUser(String username) {
+        Integer userIdToDelete = jdbcClient.sql("SELECT user_id FROM Users WHERE username = :username")
+                .param("username", username)
+                .query(Integer.class)
+                .optional()
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        jdbcClient.sql("DELETE FROM Users WHERE user_id = :userIdToDelete")
+                .param("userIdToDelete", userIdToDelete)
+                .update();
+    }
+
+
+    public void deleteWorkougLogsByDate(String date, String day_of_week) {
+        jdbcClient.sql("DELETE FROM Workout WHERE week_start = :date AND day_name = :day_of_week")
+                .param("date", date)
+                .param("day_of_week", day_of_week)
+                .update();
     }
 }

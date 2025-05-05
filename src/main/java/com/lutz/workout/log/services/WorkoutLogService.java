@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -36,5 +38,13 @@ public class WorkoutLogService {
 
     public List<WorkoutLog> getall() {
         return workoutLogRepository.getAllWorkoutLogs();
+    }
+
+    public void deleteUser(String username) {
+        workoutLogRepository.deleteUser(username);
+    }
+
+    public void deleteWorkoutLogByDate(String date, String dayOfWeek) {
+        workoutLogRepository.deleteWorkougLogsByDate(date, dayOfWeek);
     }
 }

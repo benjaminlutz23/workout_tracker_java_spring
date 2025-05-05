@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS Workout (
     week_start DATE,
     day_name ENUM('SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'),
     PRIMARY KEY (workout_id),
-    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (split_id) REFERENCES Split(split_id)
 );
 
@@ -35,6 +35,6 @@ CREATE TABLE IF NOT EXISTS ExerciseDetails (
     reps INT,
     weight INT,
     PRIMARY KEY (exercise_detail_id),
-    FOREIGN KEY (workout_id) REFERENCES Workout(workout_id),
+    FOREIGN KEY (workout_id) REFERENCES Workout(workout_id) ON DELETE CASCADE,
     FOREIGN KEY (exercise_id) REFERENCES Exercise(exercise_id)
 );
