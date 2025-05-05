@@ -28,6 +28,7 @@ public class WorkoutLogService {
         Integer userId = workoutLogRepository.insertUserIntoUserTable(workoutLog.username());
         Integer exerciseId = workoutLogRepository.insertExerciseIntoExerciseTable(workoutLog.exercise_name());
         Integer splitId = workoutLogRepository.insertSplitIntoSplitTable(userId, workoutLog.week_start(), workoutLog.day_of_week().toString(), workoutLog.split_name().toString());
+        Integer workoutLogId = workoutLogRepository.insertWorkoutLogIntoWorkoutLogTable(userId, workoutLog.week_start(), workoutLog.day_of_week().toString(), exerciseId, workoutLog.sets(), workoutLog.reps(), workoutLog.weight());
         logger.info("User ID: {}, Exercise ID: {}", userId, exerciseId);
     }
 

@@ -26,23 +26,22 @@ public class LoadWorkoutsFromJson implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        logger.info("Number of workout logs in the database: {}", workoutLogService.countWorkoutLogs());
 
-        if (workoutLogService.countWorkoutLogs() == 0) {
-            try (InputStream inputStream = WorkoutApplication.class.getResourceAsStream("/data/workouts.json")) {
+        try (InputStream inputStream = WorkoutApplication.class.getResourceAsStream("/data/workouts.json")) {
 
-                if (inputStream == null) {
-                    throw new RuntimeException("Failed to load workoutLogs.json file");
-                }
-                WorkoutLogs allWorkouts = objectMapper.readValue(inputStream, WorkoutLogs.class);
-                logger.info("Loading workoutLogs from json file: ", allWorkouts.workoutLogs().size());
-
-                for (WorkoutLog workoutLog : allWorkouts.workoutLogs()) {
-                    workoutLogService.createWorkoutLog(workoutLog);
-                }
+            if (inputStream == null) {
+                throw new RuntimeException("Failed to load workoutLogs.json file");
             }
-            catch (Exception e) {
-                throw new RuntimeException("Failed to read JSON data", e);
+            WorkoutLogs allWorkouts = objectMapper.readValue(inputStream, WorkoutLogs.class);
+            logger.info("Loading workoutLogs from json file: ", allWorkouts.workoutLogs().size());
+
+            for (WorkoutLog workoutLog : allWorkouts.workoutLogs()) {
+                workoutLogService.createWorkoutLog(workoutLog);
             }
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Failed to read JSON data", e);
         }
     }
 

@@ -42,7 +42,7 @@ public class WorkoutLogRepository {
     }
 
     public Integer countWorkoutLogs() {
-        return jdbcClient.sql("SELECT COUNT(*) FROM Users")
+        return jdbcClient.sql("SELECT COUNT(*) FROM WorkoutLogs")
                 .query()
                 .listOfRows()
                 .size();
@@ -87,6 +87,34 @@ public class WorkoutLogRepository {
                 .param("week_start", week_start)
                 .param("day_of_week", day_of_week)
                 .param("split_name", split_name)
+                .update(keyHolder);
+
+        return Objects.requireNonNull(keyHolder.getKey()).intValue();
+    }
+
+    public Integer insertWorkoutLogIntoWorkoutLogTable(Integer user_id, LocalDate week_start, String day_name, Integer exercise_id, Integer sets, Integer reps, Integer weight) {
+        Optional<Integer> existingWorkoutLogId = jdbcClient.sql("SELECT workout_id FROM WorkoutLogs WHERE user_id = :user_id AND week_start = :week_start AND day_name = :day_name AND exercise_id = :exercise_id")
+                .param("user_id", user_id)
+                .param("week_start", week_start)
+                .param("day_name", day_name)
+                .param("exercise_id", exercise_id)
+                .query(Integer.class)
+                .optional();
+
+        if (existingWorkoutLogId.isPresent()) {
+            return existingWorkoutLogId.get();
+        }
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcClient.sql("INSERT INTO WorkoutLogs (user_id, week_start, day_name, exercise_id, sets, reps, weight) VALUES (:user_id, :week_start, :day_name, :exercise_id, :sets, :reps, :weight)")
+                .param("user_id", user_id)
+                .param("week_start", week_start)
+                .param("day_name", day_name)
+                .param("exercise_id", exercise_id)
+                .param("sets", sets)
+                .param("reps", reps)
+                .param("weight", weight)
                 .update(keyHolder);
 
         return Objects.requireNonNull(keyHolder.getKey()).intValue();
