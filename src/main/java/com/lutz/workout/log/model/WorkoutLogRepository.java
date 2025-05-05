@@ -45,4 +45,23 @@ public class WorkoutLogRepository {
                 .listOfRows()
                 .size();
     }
+
+    public Integer insertExerciseIntoExerciseTable(String exerciseName) {
+        Optional<Integer> existingExerciseId = jdbcClient.sql("SELECT exercise_id FROM Exercise WHERE exercise_name = :exerciseName")
+                .param("exerciseName", exerciseName)
+                .query(Integer.class)
+                .optional();
+
+        if (existingExerciseId.isPresent()) {
+            return existingExerciseId.get();
+        }
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcClient.sql("INSERT INTO Exercise (exercise_name) VALUES (:exerciseName)")
+                .param("exerciseName", exerciseName)
+                .update(keyHolder);
+
+        return Objects.requireNonNull(keyHolder.getKey()).intValue();
+    }
 }

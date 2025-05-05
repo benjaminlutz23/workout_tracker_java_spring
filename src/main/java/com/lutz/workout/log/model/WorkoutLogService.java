@@ -22,7 +22,8 @@ public class WorkoutLogService {
 
     public void createWorkoutLog(WorkoutLog workoutLog) {
         Integer userId = workoutLogRepository.insertUserIntoUserTable(workoutLog.username());
-        logger.info("User ID: {}", userId);
+        Integer exerciseId = workoutLogRepository.insertExerciseIntoExerciseTable(workoutLog.exercise_name());
+        logger.info("User ID: {}, Exercise ID: {}", userId, exerciseId);
     }
 
 }
