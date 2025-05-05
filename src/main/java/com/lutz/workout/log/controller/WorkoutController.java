@@ -1,5 +1,8 @@
-package com.lutz.workout.log;
+package com.lutz.workout.log.controller;
 
+import com.lutz.workout.log.model.WorkoutLog;
+import com.lutz.workout.log.exception.WorkoutLogNotFoundException;
+import com.lutz.workout.log.model.WorkoutLogRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package com.lutz.workout.log;
+package com.lutz.workout.log.model;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;

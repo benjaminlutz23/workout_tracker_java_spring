@@ -1,4 +1,4 @@
-package com.lutz.workout.log;
+package com.lutz.workout.log.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

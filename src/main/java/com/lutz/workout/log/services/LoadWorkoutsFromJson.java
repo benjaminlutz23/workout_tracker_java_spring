@@ -1,7 +1,10 @@
-package com.lutz.workout.log;
+package com.lutz.workout.log.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lutz.workout.WorkoutApplication;
+import com.lutz.workout.log.model.WorkoutLog;
+import com.lutz.workout.log.model.WorkoutLogRepository;
+import com.lutz.workout.log.model.WorkoutLogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;

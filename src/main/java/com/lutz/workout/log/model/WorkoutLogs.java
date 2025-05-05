@@ -1,4 +1,4 @@
-package com.lutz.workout.log;
+package com.lutz.workout.log.model;
 
 import java.util.List;
 

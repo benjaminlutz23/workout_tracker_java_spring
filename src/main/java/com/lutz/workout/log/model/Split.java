@@ -1,4 +1,4 @@
-package com.lutz.workout.log;
+package com.lutz.workout.log.model;
 
 public enum Split {
     PUSH,
