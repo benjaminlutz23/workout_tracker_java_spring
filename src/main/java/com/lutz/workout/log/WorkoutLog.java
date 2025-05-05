@@ -1,8 +1,7 @@
-package com.lutz.workout.Log;
+package com.lutz.workout.log;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
-import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;

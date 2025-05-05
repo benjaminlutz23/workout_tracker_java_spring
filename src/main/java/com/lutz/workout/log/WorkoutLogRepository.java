@@ -1,5 +1,6 @@
-package com.lutz.workout.Log;
+package com.lutz.workout.log;
 
+import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -9,9 +10,11 @@ import java.util.List;
 public class WorkoutLogRepository {
 
     public List<WorkoutLog> workoutLogs;
+    public final JdbcClient jdbcClient;
 
-    public WorkoutLogRepository() {
+    public WorkoutLogRepository(JdbcClient jdbcClient) {
        workoutLogs = new ArrayList<>();
+       this.jdbcClient = jdbcClient;
     }
 
     public List<WorkoutLog> getWorkoutLogs() {
