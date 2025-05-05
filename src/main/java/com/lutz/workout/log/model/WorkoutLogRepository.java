@@ -1,5 +1,6 @@
 package com.lutz.workout.log.model;
 
+import com.lutz.workout.log.domain.WorkoutLog;
 import org.springframework.data.relational.core.sql.In;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -7,6 +8,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -133,5 +135,24 @@ public class WorkoutLogRepository {
                 .update(keyHolder);
 
         return Objects.requireNonNull(keyHolder.getKey()).intValue();
+    }
+
+    public List<WorkoutLog> getAllWorkoutLogs() {
+        return jdbcClient.sql("SELECT " +
+                        "    u.username, " +
+                        "    w.week_start, " +
+                        "    w.day_name as day_of_week, " +
+                        "    s.split_name, " +
+                        "    e.exercise_name, " +
+                        "    ed.sets, " +
+                        "    ed.reps, " +
+                        "    ed.weight " +
+                        "FROM Users u " +
+                        "JOIN Workout w ON u.user_id = w.user_id " +
+                        "JOIN `Split` s ON s.split_id = w.split_id " +
+                        "JOIN ExerciseDetails ed ON ed.workout_id = w.workout_id " +
+                        "JOIN Exercise e ON e.exercise_id = ed.exercise_id")
+                .query(WorkoutLog.class)
+                .list();
     }
 }

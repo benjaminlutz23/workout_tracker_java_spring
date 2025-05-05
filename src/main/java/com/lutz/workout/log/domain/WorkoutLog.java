@@ -7,7 +7,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 public record WorkoutLog(
-        Integer id,
         @NotEmpty
         String username,
         LocalDate week_start,

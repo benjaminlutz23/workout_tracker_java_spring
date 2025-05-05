@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 @Service
 public class WorkoutLogService {
@@ -32,4 +34,7 @@ public class WorkoutLogService {
         logger.info("\nUser ID: {} \n Exercise ID: {} \n Split ID: {} \n Workout ID: {} \n Exercise Details ID: {}", userId, exerciseId, splitId, workoutId, exerciseDetailsId);
     }
 
+    public List<WorkoutLog> getall() {
+        return workoutLogRepository.getAllWorkoutLogs();
+    }
 }

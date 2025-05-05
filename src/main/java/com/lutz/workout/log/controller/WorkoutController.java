@@ -6,6 +6,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/workout-logs")
 public class WorkoutController {
@@ -15,11 +17,11 @@ public class WorkoutController {
         this.workoutLogService = workoutLogService;
     }
 
-//    @ResponseStatus(HttpStatus.OK)
-//    @GetMapping("")
-//    public List<WorkoutLog> getWorkoutLogs() {
-//        return workoutLogService.getWorkoutLogs();
-//    }
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("")
+    public List<WorkoutLog> getWorkoutLogs() {
+        return workoutLogService.getall();
+    }
 //
 //    @ResponseStatus(HttpStatus.OK)
 //    @GetMapping("/{id}")
