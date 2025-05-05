@@ -6,6 +6,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -60,6 +62,31 @@ public class WorkoutLogRepository {
 
         jdbcClient.sql("INSERT INTO Exercise (exercise_name) VALUES (:exerciseName)")
                 .param("exerciseName", exerciseName)
+                .update(keyHolder);
+
+        return Objects.requireNonNull(keyHolder.getKey()).intValue();
+    }
+
+    public Integer insertSplitIntoSplitTable(Integer user_id, LocalDate week_start, String day_of_week, String split_name) {
+        Optional<Integer> existingSplitId = jdbcClient.sql("SELECT split_id FROM WeeklySplit WHERE user_id = :user_id AND week_start = :week_start AND day_name = :day_of_week AND split_name = :split_name")
+                .param("user_id", user_id)
+                .param("week_start", week_start)
+                .param("day_of_week", day_of_week)
+                .param("split_name", split_name)
+                .query(Integer.class)
+                .optional();
+
+        if (existingSplitId.isPresent()) {
+            return existingSplitId.get();
+        }
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcClient.sql("INSERT INTO WeeklySplit (user_id, week_start, day_name, split_name) VALUES (:user_id, :week_start, :day_of_week, :split_name)")
+                .param("user_id", user_id)
+                .param("week_start", week_start)
+                .param("day_of_week", day_of_week)
+                .param("split_name", split_name)
                 .update(keyHolder);
 
         return Objects.requireNonNull(keyHolder.getKey()).intValue();

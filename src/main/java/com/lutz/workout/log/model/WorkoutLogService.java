@@ -4,6 +4,9 @@ import com.lutz.workout.log.services.LoadWorkoutsFromJson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.beans.Transient;
 
 
 @Service
@@ -20,9 +23,11 @@ public class WorkoutLogService {
         return workoutLogRepository.countWorkoutLogs();
     }
 
+    @Transactional
     public void createWorkoutLog(WorkoutLog workoutLog) {
         Integer userId = workoutLogRepository.insertUserIntoUserTable(workoutLog.username());
         Integer exerciseId = workoutLogRepository.insertExerciseIntoExerciseTable(workoutLog.exercise_name());
+        Integer splitId = workoutLogRepository.insertSplitIntoSplitTable(userId, workoutLog.week_start(), workoutLog.day_of_week().toString(), workoutLog.split_name().toString());
         logger.info("User ID: {}, Exercise ID: {}", userId, exerciseId);
     }
 
