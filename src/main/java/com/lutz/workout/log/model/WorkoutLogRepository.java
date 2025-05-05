@@ -158,14 +158,8 @@ public class WorkoutLogRepository {
     }
 
     public void deleteUser(String username) {
-        Integer userIdToDelete = jdbcClient.sql("SELECT user_id FROM Users WHERE username = :username")
+        jdbcClient.sql("DELETE FROM Users WHERE username = :username")
                 .param("username", username)
-                .query(Integer.class)
-                .optional()
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-        jdbcClient.sql("DELETE FROM Users WHERE user_id = :userIdToDelete")
-                .param("userIdToDelete", userIdToDelete)
                 .update();
     }
 
