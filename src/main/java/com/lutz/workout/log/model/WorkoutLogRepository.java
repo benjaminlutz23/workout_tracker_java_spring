@@ -157,6 +157,47 @@ public class WorkoutLogRepository {
                 .list();
     }
 
+    public Integer upsertExerciseDetails(Integer workout_id, Integer exercise_id, Integer sets, Integer reps, Integer weight) {
+        Optional<Integer> existingId = jdbcClient.sql("""
+            SELECT exercise_detail_id 
+            FROM ExerciseDetails 
+            WHERE workout_id = :workout_id AND exercise_id = :exercise_id
+        """)
+                .param("workout_id", workout_id)
+                .param("exercise_id", exercise_id)
+                .query(Integer.class)
+                .optional();
+
+        if (existingId.isPresent()) {
+            jdbcClient.sql("""
+            UPDATE ExerciseDetails 
+            SET sets = :sets, reps = :reps, weight = :weight 
+            WHERE exercise_detail_id = :id
+        """)
+                    .param("sets", sets)
+                    .param("reps", reps)
+                    .param("weight", weight)
+                    .param("id", existingId.get())
+                    .update();
+
+            return existingId.get();
+        } else {
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            jdbcClient.sql("""
+            INSERT INTO ExerciseDetails (workout_id, exercise_id, sets, reps, weight) 
+            VALUES (:workout_id, :exercise_id, :sets, :reps, :weight)
+        """)
+                    .param("workout_id", workout_id)
+                    .param("exercise_id", exercise_id)
+                    .param("sets", sets)
+                    .param("reps", reps)
+                    .param("weight", weight)
+                    .update(keyHolder);
+
+            return Objects.requireNonNull(keyHolder.getKey()).intValue();
+        }
+    }
+
     public void deleteUser(String username) {
         jdbcClient.sql("DELETE FROM Users WHERE username = :username")
                 .param("username", username)

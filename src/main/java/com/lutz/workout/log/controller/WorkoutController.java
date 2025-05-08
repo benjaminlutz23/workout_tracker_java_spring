@@ -6,6 +6,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -22,15 +24,6 @@ public class WorkoutController {
     public List<WorkoutLog> getWorkoutLogs() {
         return workoutLogService.getall();
     }
-//
-//    @ResponseStatus(HttpStatus.OK)
-//    @GetMapping("/{id}")
-//    public WorkoutLog getWorkoutLogById(@PathVariable Integer id) {
-//        return workoutLogService.getWorkoutLogs().stream()
-//                .filter(workoutLog -> workoutLog.id().equals(id))
-//                .findFirst()
-//                .orElseThrow(() -> new WorkoutLogNotFoundException());
-//    }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
@@ -38,11 +31,11 @@ public class WorkoutController {
         workoutLogService.createWorkoutLog(workoutLog);
     }
 
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    @PutMapping("/{workoutLogId}")
-//    public void updateWorkoutLog(@Valid @RequestBody WorkoutLog workoutLog, @PathVariable Integer workoutLogId) {
-//        workoutLogService.updateWorkoutLog(workoutLog, workoutLogId);
-//    }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("")
+    public void updateExericseDetails(@Valid @RequestBody WorkoutLog workoutLog, @RequestParam String username, @RequestParam LocalDate weekStart, @RequestParam DayOfWeek dayOfWeek, @RequestParam String splitName, @RequestParam String exerciseName) {
+        workoutLogService.updateExerciseDetails(workoutLog, username, weekStart, dayOfWeek, splitName, exerciseName);
+    }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{username}")
@@ -51,8 +44,8 @@ public class WorkoutController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{date}/{dayOfWeek}")
-    public void delateWorkoutLogByDate(@PathVariable String date, @PathVariable String dayOfWeek) {
-        workoutLogService.deleteWorkoutLogByDate(date, dayOfWeek);
+    @DeleteMapping("")
+    public void delateWorkoutLogByDate(@RequestParam String weekStart, @RequestParam String dayOfWeek) {
+        workoutLogService.deleteWorkoutLogByDate(weekStart, dayOfWeek);
     }
 }

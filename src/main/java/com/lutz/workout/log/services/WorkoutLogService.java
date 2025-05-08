@@ -40,6 +40,15 @@ public class WorkoutLogService {
         return workoutLogRepository.getAllWorkoutLogs();
     }
 
+    public void updateExerciseDetails(WorkoutLog workoutLog, String username, LocalDate week_start, DayOfWeek day_of_week, String split_name, String exercise_name) {
+        Integer userId = workoutLogRepository.insertUserIntoUserTable(username);
+        Integer exerciseId = workoutLogRepository.insertExerciseIntoExerciseTable(exercise_name);
+        Integer splitId = workoutLogRepository.insertSplitIntoSplitTable(split_name);
+        Integer workoutId = workoutLogRepository.insertWorkoutIntoWorkoutTable(userId, splitId, week_start, day_of_week.toString());
+        Integer exerciseDetailsId = workoutLogRepository.upsertExerciseDetails(workoutId, exerciseId, workoutLog.sets(), workoutLog.reps(), workoutLog.weight());
+        logger.info("\nWorkout update with the following: \n User ID: {} \n Exercise ID: {} \n Split ID: {} \n Workout ID: {} \n Exercise Details ID: {}", userId, exerciseId, splitId, workoutId, exerciseDetailsId);
+    }
+
     public void deleteUser(String username) {
         workoutLogRepository.deleteUser(username);
     }
